@@ -12,8 +12,12 @@ os.environ["SWANLAB_PROJECT"]="qwen3-sft-medical"
 PROMPT = "你是一个医学专家，你需要根据用户的问题，给出带有思考的回答。"
 MAX_LENGTH = 2048
 
+
+swanlab.init(project="medical-assistant",
+             experiment_name="qwen3-0.6B")
+
 swanlab.config.update({
-    "model": "Qwen/Qwen3-1.7B",
+    "model": "Qwen/Qwen3-0.6B",
     "prompt": PROMPT,
     "data_max_length": MAX_LENGTH,
     })
@@ -25,7 +29,7 @@ def dataset_jsonl_transfer(origin_path, new_path):
     messages = []
 
     # 读取旧的JSONL文件
-    with open(origin_path, "r") as file:
+    with open(origin_path, "r",encoding="utf-8") as file:
         for line in file:
             # 解析每一行的json数据
             data = json.loads(line)
@@ -49,8 +53,7 @@ def dataset_jsonl_transfer(origin_path, new_path):
 def process_func(example):
     """
     将数据集进行预处理
-    """ 
-    input_ids, attention_mask, labels = [], [], []
+    """
     instruction = tokenizer(
         f"<|im_start|>system\n{PROMPT}<|im_end|>\n<|im_start|>user\n{example['input']}<|im_end|>\n<|im_start|>assistant\n",
         add_special_tokens=False,
@@ -89,12 +92,15 @@ def predict(messages, model, tokenizer):
 
     return response
 
+script_path = os.path.dirname(os.path.abspath(__file__))
+cache_path = os.path.join(script_path, "models")
+
 # 在modelscope上下载Qwen模型到本地目录下
-model_dir = snapshot_download("Qwen/Qwen3-1.7B", cache_dir="./", revision="master")
+model_dir = snapshot_download("Qwen/Qwen3-0.6B", cache_dir=cache_path, revision="master")
 
 # Transformers加载模型权重
-tokenizer = AutoTokenizer.from_pretrained("./Qwen/Qwen3-1.7B", use_fast=False, trust_remote_code=True)
-model = AutoModelForCausalLM.from_pretrained("./Qwen/Qwen3-1.7B", device_map="auto", torch_dtype=torch.bfloat16)
+tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=False, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(model_dir, device_map="auto", torch_dtype=torch.bfloat16)
 model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
 
 # 配置lora
@@ -132,7 +138,7 @@ eval_ds = Dataset.from_pandas(eval_df)
 eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
 
 args = TrainingArguments(
-    output_dir="./output/Qwen3-1.7B",
+    output_dir="./output/Qwen3-0.6B",
     per_device_train_batch_size=1,
     per_device_eval_batch_size=1,
     gradient_accumulation_steps=4,
@@ -145,7 +151,7 @@ args = TrainingArguments(
     save_on_each_node=True,
     gradient_checkpointing=True,
     report_to="swanlab",
-    run_name="qwen3-1.7B",
+    run_name="qwen3-0.6B",
 )
 
 trainer = Trainer(
