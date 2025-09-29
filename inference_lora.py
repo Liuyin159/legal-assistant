@@ -5,7 +5,7 @@ from modelscope import snapshot_download
 import os
 
 def predict(messages, model, tokenizer):
-    device = "cpu"
+    device = "cuda"
 
     text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     model_inputs = tokenizer([text], return_tensors="pt").to(device)
@@ -32,12 +32,12 @@ load_dtype = torch.float32
 
 tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=False, trust_remote_code=True)
 model = AutoModelForCausalLM.from_pretrained(model_dir, torch_dtype=load_dtype)
-model.to("cpu")
 
 # 加载lora模型（请将路径改为你实际的 LoRA 输出目录，需包含 adapter_config.json）
 # 示例：model = PeftModel.from_pretrained(model, model_id="./output/your_lora_dir")
 # 当前占位路径会报错，如未训练 LoRA 请注释下一行
-# model = PeftModel.from_pretrained(model, model_id="./output/Qwen3-0.6B/checkpoint-1082")
+model = PeftModel.from_pretrained(model, model_id="./output/Qwen3-0.6B/checkpoint-1084")
+model.to('cuda')
 
 test_texts = {
     'instruction': "你是一个医学专家，你需要根据用户的问题，给出带有思考的回答。",

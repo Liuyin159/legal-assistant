@@ -14,10 +14,10 @@ MAX_LENGTH = 2048
 
 
 swanlab.init(project="medical-assistant",
-             experiment_name="qwen3-0.6B")
+             experiment_name="qwen3-1.7B")
 
 swanlab.config.update({
-    "model": "Qwen/Qwen3-0.6B",
+    "model": "Qwen/Qwen3-1.7B",
     "prompt": PROMPT,
     "data_max_length": MAX_LENGTH,
     })
@@ -96,7 +96,7 @@ script_path = os.path.dirname(os.path.abspath(__file__))
 cache_path = os.path.join(script_path, "models")
 
 # 在modelscope上下载Qwen模型到本地目录下
-model_dir = snapshot_download("Qwen/Qwen3-0.6B", cache_dir=cache_path, revision="master")
+model_dir = snapshot_download("Qwen/Qwen3-1.7B", cache_dir=cache_path, revision="master")
 
 # Transformers加载模型权重
 tokenizer = AutoTokenizer.from_pretrained(model_dir, use_fast=False, trust_remote_code=True)
@@ -138,7 +138,7 @@ eval_ds = Dataset.from_pandas(eval_df)
 eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
 
 args = TrainingArguments(
-    output_dir="./output/Qwen3-0.6B",
+    output_dir="./output/Qwen3-1.7B",
     per_device_train_batch_size=1,
     per_device_eval_batch_size=1,
     gradient_accumulation_steps=4,
@@ -151,7 +151,7 @@ args = TrainingArguments(
     save_on_each_node=True,
     gradient_checkpointing=True,
     report_to="swanlab",
-    run_name="qwen3-0.6B",
+    run_name="qwen3-1.7B",
 )
 
 trainer = Trainer(

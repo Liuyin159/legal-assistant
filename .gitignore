@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+env/
+venv/
+.venv/
+
+# ML models
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.pb
+*.tflite
+
+# Model folders
+models/
+checkpoints/
+runs/
+logs/
+wandb/
+
+# Data files
+*.csv
+*.jsonl
+*.parquet
+*.h5
+*.hdf5
+data/
+
+# Output folders
+output/
+results/
+predictions/
+swanlog/
+
+# System
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+**/*.ipynb_checkpoints
+
+# Jupyter
+*.ipynb
+**/*.ipynb
