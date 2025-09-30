@@ -57,5 +57,3 @@ def process_save_data(origin_path):
 
 
 process_save_data('./CrimeKgAssitant.json')
-
-啥都不要生成我存个信息

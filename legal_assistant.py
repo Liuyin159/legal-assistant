@@ -95,7 +95,7 @@ SAMPLE_QUESTIONS = {
 }
 
 class LawAssistant:
-    def __init__(self, base_model_path=None, lora_path=None, merged_model_path=None):
+    def __init__(self, base_model_path="./models/Qwen/Qwen3-1.7B", lora_path=None, merged_model_path=None):
         """
         初始化法律助手
         
@@ -262,6 +262,7 @@ class LawAssistant:
             messages,
             tokenize=False,
             add_generation_prompt=True,
+            enable_thinking=False  # 显式关闭思考模式
         )
         inputs = self.tokenizer([text], return_tensors="pt")
         input_ids = inputs.input_ids.to(model_device)
@@ -449,7 +450,7 @@ def main():
     # 模型路径参数组
     model_group = parser.add_argument_group('模型路径设置')
     model_group.add_argument("--base-model", type=str, 
-                           default="Qwen/Qwen3-1.7B",
+                           default="./models/Qwen/Qwen3-1.7B",
                            help="基础模型路径或名称")
     model_group.add_argument("--lora-path", type=str, 
                            help="LoRA适配器路径")
