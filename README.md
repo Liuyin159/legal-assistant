@@ -20,7 +20,6 @@ week9/项目实战/
 │   ├── train_lora.py             # LoRA微调训练脚本
 │   ├── inference.py              # 基础推理脚本
 │   ├── inference_lora.py         # LoRA推理脚本
-│   ├── data.py                   # 数据处理脚本
 │   └── download_model.py         # 模型下载脚本
 │   └── data_transfer.py          # 数据处理脚本
 ```
