@@ -36,7 +36,7 @@ model = AutoModelForCausalLM.from_pretrained(model_dir, torch_dtype=load_dtype)
 # 加载lora模型（请将路径改为你实际的 LoRA 输出目录，需包含 adapter_config.json）
 # 示例：model = PeftModel.from_pretrained(model, model_id="./output/your_lora_dir")
 # 当前占位路径会报错，如未训练 LoRA 请注释下一行
-model = PeftModel.from_pretrained(model, model_id="./output/Qwen3-1.7B/checkpoint-1084")
+model = PeftModel.from_pretrained(model, model_id="./output/Qwen3-1.7B/leagal/checkpoint-2080")
 model.to('cuda')
 
 test_texts = {

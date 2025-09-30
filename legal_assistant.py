@@ -452,7 +452,8 @@ def main():
     model_group.add_argument("--base-model", type=str, 
                            default="./models/Qwen/Qwen3-1.7B",
                            help="基础模型路径或名称")
-    model_group.add_argument("--lora-path", type=str, 
+    model_group.add_argument("--lora-path", type=str,
+                            default="./output/Qwen3-1.7B/leagal/checkpoint-2080", 
                            help="LoRA适配器路径")
     model_group.add_argument("--merged-model", type=str, 
                            help="合并后的模型路径")
