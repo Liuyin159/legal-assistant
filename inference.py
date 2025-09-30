@@ -20,7 +20,6 @@ def predict(messages, model, tokenizer):
 
     return response
 
-
 # 定义模型名称
 model_name = "Qwen/Qwen3-0.6B"
 

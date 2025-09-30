@@ -1,0 +1,8 @@
+swanlab                    # 训练监控
+modelscope==1.22.0        # 模型下载
+transformers              # 模型加载
+datasets==3.2.0           # 数据处理
+peft                      # LoRA微调
+accelerate                # 训练加速
+pandas                    # 数据处理
+addict                    # 配置管理

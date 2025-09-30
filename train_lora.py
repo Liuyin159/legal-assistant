@@ -9,11 +9,11 @@ import os
 import swanlab
 
 os.environ["SWANLAB_PROJECT"]="qwen3-sft-medical"
-PROMPT = "你是一个医学专家，你需要根据用户的问题，给出带有思考的回答。"
+PROMPT = "你是一个法律专家，你需要根据用户的问题，给出准确的回答。"
 MAX_LENGTH = 2048
 
 
-swanlab.init(project="medical-assistant",
+swanlab.init(project="legal-assistant",
              experiment_name="qwen3-1.7B")
 
 swanlab.config.update({
@@ -21,34 +21,6 @@ swanlab.config.update({
     "prompt": PROMPT,
     "data_max_length": MAX_LENGTH,
     })
-
-def dataset_jsonl_transfer(origin_path, new_path):
-    """
-    将原始数据集转换为大模型微调所需数据格式的新数据集
-    """
-    messages = []
-
-    # 读取旧的JSONL文件
-    with open(origin_path, "r",encoding="utf-8") as file:
-        for line in file:
-            # 解析每一行的json数据
-            data = json.loads(line)
-            input = data["question"]
-            think = data["think"]
-            answer = data["answer"]
-            output = f"<think>{think}</think> \n {answer}"
-            message = {
-                "instruction": PROMPT,
-                "input": f"{input}",
-                "output": output,
-            }
-            messages.append(message)
-
-    # 保存重构后的JSONL文件
-    with open(new_path, "w", encoding="utf-8") as file:
-        for message in messages:
-            file.write(json.dumps(message, ensure_ascii=False) + "\n")
-
 
 def process_func(example):
     """
@@ -116,16 +88,10 @@ config = LoraConfig(
 model = get_peft_model(model, config)
 
 # 加载、处理数据集和测试集
-train_dataset_path = "train.jsonl"
-test_dataset_path = "val.jsonl"
 
-train_jsonl_new_path = "train_format.jsonl"
-test_jsonl_new_path = "val_format.jsonl"
 
-if not os.path.exists(train_jsonl_new_path):
-    dataset_jsonl_transfer(train_dataset_path, train_jsonl_new_path)
-if not os.path.exists(test_jsonl_new_path):
-    dataset_jsonl_transfer(test_dataset_path, test_jsonl_new_path)
+train_jsonl_new_path = "train_data.jsonl"
+test_jsonl_new_path = "val_data.jsonl"
 
 # 得到训练集
 train_df = pd.read_json(train_jsonl_new_path, lines=True)
@@ -138,7 +104,7 @@ eval_ds = Dataset.from_pandas(eval_df)
 eval_dataset = eval_ds.map(process_func, remove_columns=eval_ds.column_names)
 
 args = TrainingArguments(
-    output_dir="./output/Qwen3-1.7B",
+    output_dir="./output/Qwen3-1.7B/leagal",
     per_device_train_batch_size=1,
     per_device_eval_batch_size=1,
     gradient_accumulation_steps=4,
