@@ -22,6 +22,7 @@ week9/项目实战/
 │   ├── inference_lora.py         # LoRA推理脚本
 │   └── download_model.py         # 模型下载脚本
 │   └── data_transfer.py          # 数据处理脚本
+│   └── CrimeKgAssitant.py        # 清洗好的52k法律问答数据集
 ```
 
 ## 技术架构

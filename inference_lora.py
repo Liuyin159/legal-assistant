@@ -18,7 +18,7 @@ def predict(messages, model, tokenizer):
 
 
 # 定义模型名称
-model_name = "Qwen/Qwen3-0.6B"
+model_name = "Qwen/Qwen3-1.7B"
 
 # 获取脚本所在目录，并创建模型缓存路径
 script_path = os.path.dirname(os.path.abspath(__file__))
@@ -36,12 +36,12 @@ model = AutoModelForCausalLM.from_pretrained(model_dir, torch_dtype=load_dtype)
 # 加载lora模型（请将路径改为你实际的 LoRA 输出目录，需包含 adapter_config.json）
 # 示例：model = PeftModel.from_pretrained(model, model_id="./output/your_lora_dir")
 # 当前占位路径会报错，如未训练 LoRA 请注释下一行
-model = PeftModel.from_pretrained(model, model_id="./output/Qwen3-0.6B/checkpoint-1084")
+model = PeftModel.from_pretrained(model, model_id="./output/Qwen3-1.7B/checkpoint-1084")
 model.to('cuda')
 
 test_texts = {
-    'instruction': "你是一个医学专家，你需要根据用户的问题，给出带有思考的回答。",
-    'input': "医生，我最近被诊断为糖尿病，听说碳水化合物的选择很重要，我应该选择什么样的碳水化合物呢？"
+    'instruction': "你是一个法律专家，你需要根据用户的问题，给出带有思考的回答。",
+    'input': "医生我和妻子离婚了财产如何分割，孩子抚养权归谁？"
 }
 
 instruction = test_texts['instruction']
